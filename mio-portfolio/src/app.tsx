@@ -1,77 +1,73 @@
 import React, { useRef, useState } from 'react';
-import { Flip } from 'gsap/Flip'; // Flip è ancora necessario qui per la logica
+import { Flip } from 'gsap/Flip';
 
-// Importiamo i nostri nuovi componenti
+// Importiamo i nostri componenti
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProjectGrid } from './components/ProjectGrid';
 import { ProjectModal } from './components/ProjectModal';
-import { Project } from './types/Project'; // Importiamo il tipo
+import { About } from './components/About'; // NUOVO
+import { Contact } from './components/Contact'; // NUOVO
+import { Footer } from './components/Footer'; // NUOVO
+import { Project } from './types/Project';
 
 function App() {
   const appRef = useRef(null);
   
-  // Lo stato e la logica di Flip rimangono qui,
-  // perché 'App' controlla sia la Griglia che il Modale.
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   
-  // Questa funzione gestisce l'APERTURA del modale
+  // Funzione APERTURA modale
   const handleProjectClick = (project: Project) => {
-    // 1. Salva lo stato attuale (posizione della Card)
-    // Selezioniamo solo la card con l'ID giusto
+    // 1. Salva lo stato (posizione della card)
     const card = appRef.current.querySelector(`[data-flip-id="project-${project.id}"]`);
     const state = Flip.getState(card, { props: "borderRadius, boxShadow" });
 
-    // 2. Aggiorna lo stato di React. Questo farà APPARIRE il modale
+    // 2. Aggiorna lo stato React (fa apparire il modale)
     setSelectedProject(project);
 
-    // 3. Esegui l'animazione GSAP Flip
-    // (Usiamo un piccolo timeout per essere sicuri che React abbia renderizzato il modale)
+    // 3. Esegui animazione GSAP Flip
     setTimeout(() => {
-      // Troviamo il modale appena apparso
       const modal = appRef.current.querySelector(`[data-flip-id="project-${project.id}"]`);
-      
       Flip.from(state, {
         target: modal,
         duration: 0.6,
         ease: 'power3.inOut',
-        props: "borderRadius, boxShadow", // Anima queste proprietà CSS
+        props: "borderRadius, boxShadow",
         onStart: () => {
-          // Aggiungiamo una classe per bloccare lo scroll del body
+          // Blocca lo scroll del body
           document.body.classList.add('overflow-hidden');
         }
       });
-    }, 50); // 50ms di ritardo
+    }, 50); // 50ms di ritardo per React
   };
 
-  // Questa funzione gestisce la CHIUSURA del modale
+  // Funzione CHIUSURA modale
   const handleCloseModal = () => {
     if (!selectedProject) return;
 
-    // 1. Salva lo stato attuale (posizione del Modale)
+    // 1. Salva lo stato (posizione del modale)
     const modal = appRef.current.querySelector(`[data-flip-id="project-${selectedProject.id}"]`);
     const state = Flip.getState(modal, { props: "borderRadius, boxShadow" });
-
-    // 2. Trova la card (che è nascosta)
+    
+    // 2. Trova la card di destinazione (che è nascosta)
     const card = appRef.current.querySelector(`[data-flip-id="project-${selectedProject.id}"]`);
 
-    // 3. Esegui l'animazione GSAP Flip (all'indietro)
+    // 3. Esegui animazione Flip (all'indietro)
     Flip.to(state, {
       target: card,
       duration: 0.6,
       ease: 'power3.inOut',
       props: "borderRadius, boxShadow",
       onComplete: () => {
-        // 4. SOLO ALLA FINE, aggiorna lo stato di React per RIMUOVERE il modale
+        // 4. Solo alla fine, rimuovi il modale e sblocca lo scroll
         setSelectedProject(null);
-        // Rimuovi la classe per sbloccare lo scroll
         document.body.classList.remove('overflow-hidden');
       }
     });
   };
 
   return (
-    // 'ref' ci serve per dare a GSAP un "contesto" in cui cercare gli elementi
+    // 'ref' serve a GSAP per sapere dove cercare gli elementi
     <div ref={appRef}> 
       <Navbar />
       <main>
@@ -80,8 +76,10 @@ function App() {
           onProjectClick={handleProjectClick} 
           selectedProjectId={selectedProject?.id || null} 
         />
-        {/* Qui andranno le altre sezioni (About, Contact, etc.) */}
+        <About /> {/* Sezione "Chi Sono" */}
+        <Contact /> {/* Sezione "Contatti" */}
       </main>
+      <Footer /> {/* Footer */}
       
       {/* Il modale viene renderizzato solo se 'selectedProject' non è nullo */}
       {selectedProject && (

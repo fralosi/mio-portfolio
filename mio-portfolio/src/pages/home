@@ -1,0 +1,75 @@
+import React, { useRef, useState } from 'react';
+import { Flip } from 'gsap/Flip';
+
+// Importiamo i componenti per questa pagina
+import { Hero } from '../components/Hero';
+import { ProjectGrid } from '../components/ProjectGrid';
+import { ProjectModal } from '../components/ProjectModal';
+import { Project } from '../types/Project';
+
+// NOTA: Tutta la logica del Modale (che prima era in App.tsx)
+// si sposta qui, perché appartiene alla Homepage.
+
+export function Home() {
+  const homeRef = useRef(null);
+  
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  
+  // Funzione APERTURA modale
+  const handleProjectClick = (project: Project) => {
+    const card = homeRef.current.querySelector(`[data-flip-id="project-${project.id}"]`);
+    const state = Flip.getState(card, { props: "borderRadius, boxShadow" });
+
+    setSelectedProject(project);
+
+    setTimeout(() => {
+      const modal = homeRef.current.querySelector(`[data-flip-id="project-${project.id}"]`);
+      Flip.from(state, {
+        target: modal,
+        duration: 0.6,
+        ease: 'power3.inOut',
+        props: "borderRadius, boxShadow",
+        onStart: () => {
+          document.body.classList.add('overflow-hidden');
+        }
+      });
+    }, 50);
+  };
+
+  // Funzione CHIUSURA modale
+  const handleCloseModal = () => {
+    if (!selectedProject) return;
+
+    const modal = homeRef.current.querySelector(`[data-flip-id="project-${selectedProject.id}"]`);
+    const state = Flip.getState(modal, { props: "borderRadius, boxShadow" });
+    const card = homeRef.current.querySelector(`[data-flip-id="project-${selectedProject.id}"]`);
+
+    Flip.to(state, {
+      target: card,
+      duration: 0.6,
+      ease: 'power3.inOut',
+      props: "borderRadius, boxShadow",
+      onComplete: () => {
+        setSelectedProject(null);
+        document.body.classList.remove('overflow-hidden');
+      }
+    });
+  };
+
+  return (
+    <div ref={homeRef}>
+      <Hero />
+      <ProjectGrid 
+        onProjectClick={handleProjectClick} 
+        selectedProjectId={selectedProject?.id || null} 
+      />
+      {/* Il modale vive qui, nella pagina Home */}
+      {selectedProject && (
+        <ProjectModal 
+          project={selectedProject} 
+          onClose={handleCloseModal}
+        />
+      )}
+    </div>
+  );
+}

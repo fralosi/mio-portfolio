@@ -1,0 +1,11 @@
+import React from 'react';
+import { Contact } from '../components/Contact';
+
+export function ContactPage() {
+  return (
+    // Usiamo 'pt-24' per dare spazio sotto la navbar fissa
+    <div className="pt-24">
+      <Contact />
+    </div>
+  );
+}

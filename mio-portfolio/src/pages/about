@@ -1,0 +1,11 @@
+import React from 'react';
+import { About } from '../components/About';
+
+export function AboutPage() {
+  return (
+    // Usiamo 'pt-24' per dare spazio sotto la navbar fissa
+    <div className="pt-24"> 
+      <About />
+    </div>
+  );
+}
