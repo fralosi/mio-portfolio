@@ -1,0 +1,67 @@
+import React, { useRef } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+
+export function Hero() {
+  const heroRef = useRef(null);
+
+  useGSAP(() => {
+    // Inizializza gli elementi (prima che l'animazione parta)
+    gsap.set('.hero-line', { opacity: 0, y: 50 });
+    gsap.set('.hero-visual', { opacity: 0 });
+
+    const heroTl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1.2 } });
+    
+    heroTl.to('.hero-line', {
+      opacity: 1,
+      y: 0,
+      stagger: 0.15,
+    }, 0.5) // Inizia dopo 0.5s
+    .to('.hero-visual', {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      stagger: 0.1,
+      duration: 1,
+    }, 1); // Inizia dopo 1s
+
+  }, { scope: heroRef }); // 'scope' dice a GSAP di animare solo gli elementi dentro 'heroRef'
+
+  return (
+    <section ref={heroRef} id="home" className="min-h-screen flex items-center p-6 lg:p-10 pt-32 lg:pt-10">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+          {/* Colonna Testo */}
+          <div className="text-left">
+            <h1 className="hero-line font-serif text-6xl md:text-8xl lg:text-9xl font-black">
+              Design
+            </h1>
+            <h1 className="hero-line font-serif text-6xl md:text-8xl lg:text-9xl font-black md:pl-20">
+              Creativo &
+            </h1>
+            <h1 className="hero-line font-serif text-6xl md:text-8xl lg:text-9xl font-black">
+              Sviluppo
+            </h1>
+            <p className="hero-line subtitle max-w-md md:ml-20 mt-8 text-lg text-neutral-300">
+              Ciao, sono [Il Tuo Nome]. Trasformo idee complesse in esperienze digitali eleganti e performanti.
+            </p>
+            <a href="#projects" className="hero-line cta-button inline-block mt-10 md:ml-20 bg-brand-accent text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider hover:bg-blue-400 transition-colors">
+              Vedi i miei lavori
+            </a>
+          </div>
+          {/* Colonna Visual */}
+          <div className="hidden md:block relative h-[500px]">
+            <div 
+              className="hero-visual absolute top-0 left-0 w-3/4 h-3/4 bg-neutral-800 rounded-lg" 
+              style={{ transform: 'rotate(-10deg) translateX(-20px)' }}
+            ></div>
+            <div 
+              className="hero-visual absolute bottom-0 right-0 w-1/2 h-1/2 bg-brand-accent rounded-lg" 
+              style={{ transform: 'rotate(5deg) translateY(20px)' }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

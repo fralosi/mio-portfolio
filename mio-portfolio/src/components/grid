@@ -1,0 +1,82 @@
+import React, { useRef } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { Project } from '../types/Project'; // Importiamo il nostro tipo
+
+type ProjectCardProps = {
+  project: Project;
+  onClick: () => void; // Funzione da chiamare al click
+  isHidden: boolean; // Per nascondere la card durante l'animazione Flip
+};
+
+export function ProjectCard({ project, onClick, isHidden }: ProjectCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Animazione Hover (con useGSAP)
+  useGSAP(() => {
+    if (!cardRef.current) return;
+    
+    const img = cardRef.current.querySelector('img');
+    const cardContent = cardRef.current.querySelector('.card-content');
+    
+    const tl = gsap.timeline({ paused: true, defaults: { duration: 0.3, ease: 'power1.out' } });
+    tl.to(img, { scale: 1.05 })
+      .to(cardContent, { y: -5 }, 0);
+
+    cardRef.current.addEventListener('mouseenter', () => tl.play());
+    cardRef.current.addEventListener('mouseleave', () => tl.reverse());
+
+    return () => {
+      cardRef.current?.removeEventListener('mouseenter', () => tl.play());
+      cardRef.current?.removeEventListener('mouseleave', () => tl.reverse());
+    };
+  }, { scope: cardRef });
+
+  // Animazione ScrollTrigger (con useGSAP)
+  useGSAP(() => {
+    gsap.fromTo(cardRef.current,
+      { opacity: 0, y: 100 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      }
+    );
+  }, { scope: cardRef });
+
+  return (
+    // 'data-flip-id' è la CHIAVE per GSAP Flip. Deve essere unico!
+    <div 
+      ref={cardRef} 
+      className="project-card opacity-0 cursor-pointer"
+      data-flip-id={`project-${project.id}`} // ID per FLIP
+      onClick={onClick}
+      style={{ visibility: isHidden ? 'hidden' : 'visible' }} // Nasconde la card se il modale è aperto
+    >
+      <div className="card-content bg-neutral-800 rounded-lg overflow-hidden shadow-lg">
+        <div className="overflow-hidden h-80">
+          <img 
+            src={project.imageUrl} 
+            alt={`Immagine ${project.title}`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="p-6">
+          <h3 className="font-serif text-2xl font-bold mb-2">{project.title}</h3>
+          <p className="text-neutral-300 mb-4">{project.description}</p>
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map(tag => (
+              <span key={tag} className="tag">{tag}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

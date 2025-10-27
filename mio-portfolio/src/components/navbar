@@ -1,0 +1,25 @@
+import React, { useState } from 'react';
+
+export function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <header className="fixed top-0 left-0 w-full p-6 lg:p-10 z-50">
+      <nav className="flex justify-between items-center">
+        <a href="/" className="font-serif text-2xl font-bold">[Logo]</a>
+        <div className="hidden md:flex space-x-8">
+          <a href="#about" className="hover:text-brand-accent transition-colors">About</a>
+          <a href="#projects" className="hover:text-brand-accent transition-colors">Progetti</a>
+          <a href="#contact" className="hover:text-brand-accent transition-colors">Contatti</a>
+        </div>
+        <button 
+          className="md:hidden text-2xl"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          Menu
+        </button>
+      </nav>
+      {/* TODO: Creare il menu mobile a tendina quando 'isMobileMenuOpen' è true */}
+    </header>
+  );
+}

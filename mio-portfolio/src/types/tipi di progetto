@@ -1,0 +1,11 @@
+// Definiamo un "tipo" per i nostri dati,
+// così TypeScript sa com'è fatto un progetto.
+// 'export' permette di usarlo in altri file.
+export type Project = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  tags: string[];
+  details: string; // Testo lungo per il modale
+};
