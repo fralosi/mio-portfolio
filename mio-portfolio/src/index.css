@@ -1,14 +1,45 @@
-/* Questo file dice a Vite di "iniettare" gli stili di Tailwind CSS
-  nel tuo progetto. 
-*/
+/* 1. Direttive di Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Puoi aggiungere qui stili globali personalizzati, 
-  se necessario, ma per ora questo è tutto ciò che serve.
-*/
+/* 2. Stili Globali e Font */
 body {
-  /* Imposta il colore di sfondo di default (dalla tua palette) */
+  /* Usa le classi definite in tailwind.config.js 
+    (Assicurati di averle aggiunte lì!)
+    
+    Se non le hai aggiunte, puoi usare temporaneamente:
+    background-color: #111111;
+    color: #F4F4F4;
+  */
   @apply bg-brand-dark text-brand-light;
+  font-family: 'Inter', sans-serif;
+  /* Assicura che lo scroll sia fluido quando si clicca sui link ancora (es. #projects) */
+  scroll-behavior: smooth;
 }
+
+h1, h2, h3, h4, .font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* 3. Textura "Grain" (grana) sottile */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Questo crea l'effetto grana */
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNzUiIHN0aXRjaFRpbGVzPSJzdGl0Y2giLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbnoaXNlKSIvPjwvc3ZnPg==');
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1000;
+  will-change: opacity;
+}
+
+/* 4. Stile per i Tag dei Progetti */
+.tag {
+  @apply bg-white/10 text-brand-light py-1 px-3 rounded-full text-xs font-medium;
+}
+
