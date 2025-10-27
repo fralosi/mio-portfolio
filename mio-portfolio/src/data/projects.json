@@ -1,0 +1,18 @@
+[
+  {
+    "id": "progetto-uno",
+    "title": "Progetto Uno",
+    "description": "Breve descrizione di questo fantastico progetto...",
+    "imageUrl": "/images/progetto-uno.jpg",
+    "tags": ["React", "GSAP", "Tailwind"],
+    "caseStudy": "Testo lungo del case study..."
+  },
+  {
+    "id": "progetto-due",
+    "title": "Progetto Due",
+    "description": "Un'identità visiva e un sito web...",
+    "imageUrl": "/images/progetto-due.jpg",
+    "tags": ["TypeScript", "Figma"],
+    "caseStudy": "Testo lungo del case study..."
+  }
+]

@@ -1,0 +1,14 @@
+/* Questo file dice a Vite di "iniettare" gli stili di Tailwind CSS
+  nel tuo progetto. 
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Puoi aggiungere qui stili globali personalizzati, 
+  se necessario, ma per ora questo è tutto ciò che serve.
+*/
+body {
+  /* Imposta il colore di sfondo di default (dalla tua palette) */
+  @apply bg-brand-dark text-brand-light;
+}
